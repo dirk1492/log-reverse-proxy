@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+log-reverse-proxy
 
 # Test binary, build with `go test -c`
 *.test
@@ -13,3 +14,4 @@
 
 # Visual Studio Code files
 .vscode
+__debug_bin

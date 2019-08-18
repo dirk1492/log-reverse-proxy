@@ -72,8 +72,7 @@ func NewProxy(target *url.URL) *httputil.ReverseProxy {
 
 func handler(p *httputil.ReverseProxy) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		rsp := NewLogWriter(w)
-		p.ServeHTTP(rsp, r)
+		p.ServeHTTP(w, r)
 	}
 }
 
