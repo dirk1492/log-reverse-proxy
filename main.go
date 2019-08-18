@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -55,12 +54,6 @@ func NewProxy(target *url.URL) *httputil.ReverseProxy {
 		}
 		fmt.Println(string(resDump))
 
-		if res.StatusCode > 200 && res.StatusCode < 300 {
-			res.StatusCode = 200
-		} else {
-			res.StatusCode = 401
-		}
-
 		return nil
 	}
 
@@ -74,14 +67,4 @@ func handler(p *httputil.ReverseProxy) func(http.ResponseWriter, *http.Request) 
 	return func(w http.ResponseWriter, r *http.Request) {
 		p.ServeHTTP(w, r)
 	}
-}
-
-func toJSON(val interface{}) string {
-	data, err := json.Marshal(val)
-	if err != nil {
-		log.Println(err)
-		return ""
-	}
-
-	return string(data)
 }
