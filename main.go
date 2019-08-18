@@ -24,7 +24,7 @@ func main() {
 		panic(err)
 	}
 
-	log.Printf("Forward tarfic to %v", remote.String())
+	log.Printf("Forward trafic to %v", remote.String())
 
 	proxy := NewProxy(remote)
 	http.HandleFunc("/", handler(proxy))
@@ -37,22 +37,26 @@ func main() {
 
 func NewProxy(target *url.URL) *httputil.ReverseProxy {
 	director := func(req *http.Request) {
-		req.URL.Scheme = target.Scheme
+
+		if target.Scheme != "" {
+			req.URL.Scheme = target.Scheme
+		}
+
 		req.URL.Host = target.Host
 
 		requestDump, err := httputil.DumpRequest(req, true)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 		}
-		fmt.Println(string(requestDump))
+		log.Println(string(requestDump))
 	}
 
 	modify := func(res *http.Response) error {
 		resDump, err := httputil.DumpResponse(res, true)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 		}
-		fmt.Println(string(resDump))
+		log.Println(string(resDump))
 
 		return nil
 	}
