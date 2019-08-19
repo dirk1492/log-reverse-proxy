@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"strings"
 )
 
 func main() {
@@ -17,6 +18,10 @@ func main() {
 
 	if *target == "" {
 		panic(fmt.Errorf("empty target-url"))
+	}
+
+	if !strings.HasPrefix(*target, "http") {
+		*target = "http://" + *target
 	}
 
 	remote, err := url.Parse(*target)
@@ -38,11 +43,8 @@ func main() {
 func NewProxy(target *url.URL) *httputil.ReverseProxy {
 	director := func(req *http.Request) {
 
-		if target.Scheme != "" {
-			req.URL.Scheme = target.Scheme
-		}
-
 		req.URL.Host = target.Host
+		req.URL.Scheme = target.Scheme
 
 		requestDump, err := httputil.DumpRequest(req, true)
 		if err != nil {
